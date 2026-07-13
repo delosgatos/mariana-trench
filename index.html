@@ -792,8 +792,10 @@ fxResize(); addEventListener('resize',fxResize);
 const snow=[]; for(let i=0;i<170;i++) snow.push({x:Math.random(),y:Math.random(),r:Math.random()*1.8+0.4,s:Math.random()*0.4+0.15});
 const bubbles=[]; for(let i=0;i<44;i++) bubbles.push({x:Math.random(),y:Math.random(),r:Math.random()*3+1,s:Math.random()*0.7+0.35});
 const micro=[]; for(let i=0;i<52;i++) micro.push({x:Math.random(),y:Math.random(),r:Math.random()*1.3+0.5,s:Math.random()*0.25+0.1});
-const schools=[{dMin:15,dMax:240,y:0.40,x:Math.random(),spd:120,col:'rgba(214,230,242,'},
-               {dMin:250,dMax:940,y:0.58,x:Math.random(),spd:80,col:'rgba(150,188,214,'}];
+const schools=[{dMin:15,dMax:240,y:0.44,spd:90,col:'214,230,242',fish:[]},
+               {dMin:250,dMax:940,y:0.58,spd:64,col:'150,188,214',fish:[]}];
+schools.forEach(sc=>{ for(let i=0;i<20;i++) sc.fish.push({x:Math.random()*1.3-0.15,
+  yo:(Math.random()-0.5)*1.1, ph:Math.random()*6, sz:0.85+Math.random()*0.5}); });
 // дрейфующие силуэты медуз (фон)
 const dJel=[]; for(let i=0;i<7;i++) dJel.push({x:Math.random(),y:Math.random(),r:14+Math.random()*22,
   sp:0.02+Math.random()*0.05,ph:Math.random()*6,hue:['180,220,255','200,180,255','255,190,210'][i%3]});
@@ -844,16 +846,21 @@ function fxLoop(){
     const x=m.x*FW+Math.sin(ft*0.5+m.y*12)*4, y=m.y*FH;
     fctx.beginPath(); fctx.arc(x,y,m.r,0,7); fctx.stroke(); }
 
-  // стаи рыб в определённых слоях
+  // стаи рыб в определённых слоях — каждая рыба движется и переносится за край сама
   schools.forEach(sc=>{ if(d<sc.dMin||d>sc.dMax) return;
     const edge=Math.max(0,Math.min(1,(d-sc.dMin)/50,(sc.dMax-d)/70));
-    sc.x=(sc.x+sc.spd/FW*0.016)%1.35;
-    const bx=sc.x*FW-FW*0.18, by=sc.y*FH;
-    fctx.fillStyle=sc.col+'1)';
-    for(let i=0;i<18;i++){
-      const x=bx+(i%9)*24+Math.sin(ft*1.5+i)*4, y=by+Math.floor(i/9)*16+Math.sin(ft*2+i*0.7)*6;
-      fctx.globalAlpha=0.24*edge;
-      fctx.beginPath(); fctx.moveTo(x,y); fctx.lineTo(x-9,y-4); fctx.lineTo(x-9,y+4); fctx.closePath(); fctx.fill();
+    // уровень воды в координатах вьюпорта — рыбы не поднимаются выше него
+    const surfY=(HEADER-30)-ocean.scrollTop;
+    const baseY=Math.max(sc.y*FH, surfY+56);
+    fctx.fillStyle=`rgba(${sc.col},1)`;
+    for(const f of sc.fish){
+      f.x += sc.spd*0.016/FW;               // всегда вправо
+      if(f.x>1.18) f.x-=1.36;               // мягкий вынос вправо → возвращение слева
+      const x=f.x*FW, y=baseY+f.yo*72+Math.sin(ft*2+f.ph)*5, s=f.sz*7;
+      fctx.globalAlpha=0.26*edge;
+      fctx.beginPath(); fctx.ellipse(x,y,s,s*0.52,0,0,7); fctx.fill();           // тело
+      fctx.beginPath(); fctx.moveTo(x-s*0.9,y);                                  // хвост слева → голова вправо
+      fctx.lineTo(x-s*1.9,y-s*0.7); fctx.lineTo(x-s*1.9,y+s*0.7); fctx.closePath(); fctx.fill();
     }
     fctx.globalAlpha=1;
   });
