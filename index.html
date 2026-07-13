@@ -301,18 +301,116 @@ const ART = {
      <path d="M12 24 Q18 20 26 22 L26 28 Q18 30 12 26Z" fill="#6f7563"/>
      <circle cx="24" cy="23" r="3" fill="#d8e8a0"/><circle cx="24" cy="23" r="1.2" fill="#000"/>
      <g fill="#e8e0d0"><path d="M20 27 l0 4 l2 -4"/><path d="M26 28 l0 4 l2 -4"/></g><path d="M60 18 Q70 10 78 18Z" fill="#767c68"/>`),
-  // — водоросли —
-  kelp: _sv('0 0 60 100',
-    `<path d="M30 100 Q22 70 30 44 Q38 20 30 0" fill="none" stroke="#2f7d4f" stroke-width="7" stroke-linecap="round"/>
-     <g fill="#3a9560"><path d="M30 30 Q14 26 8 16 Q22 22 30 24Z"/><path d="M30 48 Q46 44 52 34 Q38 40 30 42Z"/><path d="M30 66 Q14 62 8 52 Q22 58 30 60Z"/><path d="M30 84 Q46 80 52 70 Q38 76 30 78Z"/></g>`),
-  seagrass: _sv('0 0 70 100',
-    `<g fill="none" stroke="#4fa86a" stroke-width="5" stroke-linecap="round"><path d="M20 100 Q16 60 24 20"/><path d="M35 100 Q35 55 33 12"/><path d="M50 100 Q54 62 46 24"/></g>`),
-  sargassum: _sv('0 0 90 70',
-    `<path d="M10 40 Q40 20 80 34" fill="none" stroke="#9a7d2e" stroke-width="4"/>
-     <g fill="#b5942f"><path d="M22 34 q-6 -8 -2 -14 q6 4 6 14Z"/><path d="M40 26 q-4 -9 2 -14 q5 6 2 14Z"/><path d="M58 28 q6 -8 2 -14 q-6 6 -4 14Z"/></g>
-     <g fill="#c9a63a"><circle cx="30" cy="30" r="3.5"/><circle cx="50" cy="24" r="3.5"/><circle cx="66" cy="30" r="3.5"/></g>`),
+  // — медузы (у каждой свои черты) —
+  jelly_lions: _sv('0 0 92 100',
+    `<path d="M14 32 Q46 4 78 32 Q68 44 46 44 Q24 44 14 32Z" fill="#d0623a"/><path d="M14 32 Q46 4 78 32" fill="none" stroke="#ec8a56" stroke-width="2"/>
+     <g stroke="#e88a58" stroke-width="1.4" fill="none" opacity="0.8"><path d="M22 42 q-4 30 0 56"/><path d="M30 43 q-2 34 2 54"/><path d="M40 44 q0 36 -2 55"/><path d="M52 44 q2 34 -2 54"/><path d="M62 43 q4 30 0 56"/><path d="M26 42 q-6 28 -4 50"/><path d="M46 44 q4 34 8 52"/><path d="M58 43 q6 28 2 50"/></g>
+     <path d="M30 43 Q46 52 62 43" stroke="#a8482a" stroke-width="3" fill="none"/><path d="M38 44 q2 22 -4 36 M52 44 q-2 22 4 36" stroke="#c25a34" stroke-width="2.5" fill="none"/>`),
+  jelly_pelagia: _sv('0 0 80 100',
+    `<path d="M16 32 Q40 8 64 32 Q54 44 40 44 Q26 44 16 32Z" fill="#a84fb0"/><path d="M16 32 Q40 8 64 32" fill="none" stroke="#c96fd0" stroke-width="1.5"/>
+     <g fill="#d98ade"><circle cx="30" cy="24" r="2.2"/><circle cx="40" cy="20" r="2.2"/><circle cx="50" cy="24" r="2.2"/><circle cx="34" cy="30" r="1.8"/><circle cx="46" cy="30" r="1.8"/></g>
+     <g stroke="#b25fb8" stroke-width="1.5" fill="none"><path d="M20 34 q-4 32 0 60"/><path d="M30 40 q-2 34 2 56"/><path d="M50 40 q2 34 -2 56"/><path d="M60 34 q4 32 0 60"/></g>
+     <path d="M34 43 q4 24 -3 42 M46 43 q-4 24 3 42" stroke="#8f3f96" stroke-width="3.5" fill="none"/>`),
+  jelly_deepstaria: _sv('0 0 96 82',
+    `<path d="M14 20 Q48 5 82 20 Q92 48 60 68 Q42 80 30 68 Q4 48 14 20Z" fill="#cfe0e8" opacity="0.32" stroke="#aecad6" stroke-width="1.5"/>
+     <g stroke="#9fbecb" stroke-width="0.9" fill="none" opacity="0.65"><path d="M30 22 Q48 42 40 66"/><path d="M50 20 Q52 44 56 64"/><path d="M64 26 Q60 46 50 64"/><path d="M18 34 Q46 40 78 34"/><path d="M22 50 Q48 56 72 48"/></g>`),
+  jelly_comb: _sv('0 0 68 96',
+    `<path d="M34 6 Q56 24 54 60 Q50 88 34 90 Q18 88 14 60 Q12 24 34 6Z" fill="#d6ecf2" opacity="0.38" stroke="#a8d8e0" stroke-width="1.5"/>
+     <g stroke-width="2.4" fill="none"><path d="M23 18 Q21 50 25 80" stroke="#7fe0c8"/><path d="M30 15 Q29 50 31 83" stroke="#9fd0ff"/><path d="M38 15 Q39 50 37 83" stroke="#c9a0ff"/><path d="M45 18 Q47 50 43 80" stroke="#ff9fd0"/></g>
+     <path d="M27 88 q7 8 14 0" stroke="#a8d8e0" stroke-width="1.5" fill="none"/>`),
+  // — моллюски —
+  seaangel: _sv('0 0 70 92',
+    `<path d="M35 20 Q44 32 42 60 Q40 82 35 86 Q30 82 28 60 Q26 32 35 20Z" fill="#dff0f5" opacity="0.6" stroke="#bcdde6" stroke-width="1.5"/>
+     <path d="M35 34 Q10 22 6 40 Q16 50 35 44Z" fill="#eaf6fa" opacity="0.6" stroke="#cfe6ee" stroke-width="1.5"/>
+     <path d="M35 34 Q60 22 64 40 Q54 50 35 44Z" fill="#eaf6fa" opacity="0.6" stroke="#cfe6ee" stroke-width="1.5"/>
+     <ellipse cx="35" cy="30" rx="6" ry="10" fill="#ff8a4a" opacity="0.85"/><g fill="#c94a2a"><circle cx="32" cy="21" r="1.6"/><circle cx="38" cy="21" r="1.6"/></g>`),
+  cuttlefish: _sv('0 0 112 68',
+    `<path d="M30 22 Q70 12 92 30 Q96 40 88 48 Q66 58 34 50 Q18 40 30 22Z" fill="#b98f5a"/>
+     <path d="M28 24 Q18 32 24 44 Q30 50 34 50" fill="none" stroke="#a37c48" stroke-width="6"/>
+     <g stroke="#c99a66" stroke-width="4" fill="none" stroke-linecap="round"><path d="M32 44 q-14 6 -24 4"/><path d="M34 48 q-16 8 -26 10"/></g>
+     <path d="M32 40 q-22 -2 -30 8" stroke="#d9b080" stroke-width="2.5" fill="none"/>
+     <circle cx="70" cy="30" r="6.5" fill="#f0e6c0"/><path d="M65 30 q5 5 10 0" stroke="#2a2a2a" stroke-width="2.5" fill="none"/>
+     <g stroke="#a37c48" stroke-width="1" opacity="0.5"><line x1="40" y1="22" x2="42" y2="46"/><line x1="52" y1="20" x2="54" y2="48"/><line x1="64" y1="22" x2="64" y2="44"/></g>`),
+  octopus: _sv('0 0 100 94',
+    `<path d="M32 30 Q34 8 52 8 Q70 8 70 32 Q70 46 52 50 Q34 48 32 30Z" fill="#c25a6a"/>
+     <g stroke="#c25a6a" stroke-width="6" fill="none" stroke-linecap="round"><path d="M40 46 q-16 20 -28 26"/><path d="M46 50 q-10 26 -16 36"/><path d="M50 51 q-2 28 -6 38"/><path d="M52 51 q2 28 6 38"/><path d="M56 50 q10 26 16 36"/><path d="M62 46 q16 20 28 26"/></g>
+     <g fill="#a84a5a"><circle cx="22" cy="66" r="1.4"/><circle cx="30" cy="76" r="1.4"/><circle cx="70" cy="76" r="1.4"/><circle cx="78" cy="66" r="1.4"/></g>
+     <circle cx="44" cy="28" r="3.6" fill="#2a1218"/><circle cx="58" cy="28" r="3.6" fill="#2a1218"/><path d="M44 26 q1 -1.5 2 0M58 26 q1 -1.5 2 0" stroke="#fff" stroke-width="1" fill="none"/>`),
+  nudibranch: _sv('0 0 100 58',
+    `<path d="M14 40 Q40 32 74 36 Q90 38 92 44 Q84 50 60 50 Q34 52 16 46 Q8 44 14 40Z" fill="#ff7ab0"/>
+     <g stroke="#c94a8a" stroke-width="3" stroke-linecap="round"><line x1="30" y1="36" x2="28" y2="20"/><line x1="42" y1="34" x2="42" y2="16"/><line x1="54" y1="34" x2="56" y2="16"/><line x1="66" y1="36" x2="70" y2="20"/></g>
+     <g fill="#ffd24a"><circle cx="28" cy="20" r="2.6"/><circle cx="42" cy="16" r="2.6"/><circle cx="56" cy="16" r="2.6"/><circle cx="70" cy="20" r="2.6"/></g>
+     <path d="M15 40 q-4 -6 -1 -11 M20 38 q-3 -8 2 -13" stroke="#c94a8a" stroke-width="2.5" fill="none"/><circle cx="20" cy="42" r="1.6" fill="#5a1a3a"/>`),
+  fireflysquid: _sv('0 0 92 60',
+    `<path d="M14 30 Q28 18 50 22 Q72 26 78 30 Q72 34 50 40 Q28 44 14 30Z" fill="#3a4a6a"/>
+     <path d="M18 26 L8 20 M18 34 L8 40" stroke="#2f3f5a" stroke-width="3"/><circle cx="62" cy="30" r="5" fill="#0a0a1a"/>
+     <g stroke="#4a5a7a" stroke-width="3" fill="none" stroke-linecap="round"><path d="M78 28 q10 -2 18 -8"/><path d="M78 30 q12 0 20 0"/><path d="M78 32 q10 4 18 8"/></g>
+     <g fill="#7fe0ff"><circle cx="28" cy="38" r="2.2"/><circle cx="42" cy="40" r="2.2"/><circle cx="56" cy="38" r="2.2"/><circle cx="84" cy="23" r="1.6"/><circle cx="88" cy="34" r="1.6"/></g>`),
+  vampsquid: _sv('0 0 92 92',
+    `<path d="M46 12 Q30 12 30 34 Q30 52 46 56 Q62 52 62 34 Q62 12 46 12Z" fill="#7a1e2e"/>
+     <path d="M30 40 Q13 60 22 84 Q35 71 41 54Z" fill="#9a2e3e" opacity="0.92"/><path d="M62 40 Q79 60 70 84 Q57 71 51 54Z" fill="#9a2e3e" opacity="0.92"/>
+     <g stroke="#6a1626" stroke-width="1" opacity="0.6"><path d="M32 44 L24 78"/><path d="M60 44 L68 78"/></g>
+     <path d="M41 54 Q43 74 41 88 M51 54 Q49 74 51 88" stroke="#7a1e2e" stroke-width="4" fill="none"/>
+     <circle cx="38" cy="30" r="6.5" fill="#5ab0ff"/><circle cx="38" cy="30" r="2.6" fill="#0a1a3a"/><circle cx="55" cy="30" r="5" fill="#5ab0ff"/><circle cx="55" cy="30" r="2" fill="#0a1a3a"/>`),
+  giantsquid: _sv('0 0 140 66',
+    `<path d="M10 35 Q30 20 62 26 Q96 32 100 35 Q96 38 62 44 Q30 50 10 35Z" fill="#c04a3e"/>
+     <path d="M14 29 L4 21 M14 41 L4 49" stroke="#a83a30" stroke-width="3"/>
+     <circle cx="86" cy="35" r="8" fill="#0a0a0a"/><circle cx="88" cy="32" r="2.5" fill="#fff"/>
+     <g stroke="#cf5a4e" stroke-width="3.4" fill="none" stroke-linecap="round"><path d="M100 30 q16 -3 28 -12"/><path d="M100 33 q18 0 32 -2"/><path d="M100 38 q16 5 28 12"/><path d="M100 35 q20 2 34 4"/></g>
+     <path d="M100 32 q26 -8 38 -20" stroke="#e07a6e" stroke-width="2.4" fill="none"/><path d="M100 37 q26 10 38 18" stroke="#e07a6e" stroke-width="2.4" fill="none"/>
+     <path d="M132 10 l6 4 l-4 5Z M132 56 l6 -4 l-4 -5Z" fill="#e07a6e"/>`),
+  colossalsquid: _sv('0 0 122 68',
+    `<path d="M12 35 Q34 17 66 23 Q94 29 98 35 Q94 41 66 49 Q34 55 12 35Z" fill="#a84a54"/>
+     <path d="M16 29 L6 21 M16 41 L6 49" stroke="#8f3a44" stroke-width="3"/>
+     <circle cx="82" cy="35" r="9" fill="#0a0a0a"/><circle cx="84" cy="31" r="3" fill="#fff"/>
+     <g stroke="#b85a64" stroke-width="4.5" fill="none" stroke-linecap="round"><path d="M98 30 q14 -4 24 -12"/><path d="M98 35 q16 0 26 -2"/><path d="M98 40 q14 6 24 12"/></g>
+     <g stroke="#7a2a34" stroke-width="1.6"><line x1="104" y1="26" x2="107" y2="22"/><line x1="113" y1="31" x2="116" y2="28"/><line x1="108" y1="43" x2="111" y2="47"/></g>`),
+  hatchetfish: _sv('0 0 82 86',
+    `<path d="M20 30 Q40 20 58 30 Q68 40 58 54 Q48 64 40 64 Q32 64 22 54 Q12 40 20 30Z" fill="#c8d4dc"/>
+     <path d="M58 34 L76 30 L72 46Z" fill="#aab8c2"/><path d="M40 24 L40 12" stroke="#aab8c2" stroke-width="2"/>
+     <circle cx="34" cy="32" r="5.5" fill="#1a2028"/><circle cx="35" cy="30" r="1.8" fill="#fff"/>
+     <g fill="#8fd0e0"><circle cx="30" cy="60" r="2"/><circle cx="38" cy="62" r="2"/><circle cx="46" cy="60" r="2"/><circle cx="42" cy="56" r="1.6"/></g>`),
+  spermwhale: _sv('0 0 140 62',
+    `<path d="M8 34 Q8 14 44 14 L110 20 Q134 24 134 36 Q120 42 100 42 L42 44 Q8 46 8 34Z" fill="#5a5550"/>
+     <path d="M18 42 Q42 52 74 47" stroke="#3f3b37" stroke-width="2.5" fill="none"/>
+     <path d="M118 22 L134 16 L132 30Z M122 40 L138 46 L134 33Z" fill="#4a453f"/>
+     <circle cx="38" cy="31" r="2.6" fill="#141412"/><path d="M12 20 q-5 -5 1 -8" stroke="#4a453f" stroke-width="2" fill="none"/>
+     <path d="M40 44 Q46 50 40 44 M56 45 L58 49 M66 46 L68 50" stroke="#4a453f" stroke-width="1.5" fill="none"/>`),
+  // — водоросли (разные формы: пластины, ленты, пузыри, известь) —
+  kelp: _sv('0 0 72 100',
+    `<circle cx="36" cy="97" r="5" fill="#5a5a2e"/><path d="M36 97 Q31 66 35 38 Q39 14 35 2" fill="none" stroke="#6a7a2e" stroke-width="4" stroke-linecap="round"/>
+     <g fill="#8fa83e"><ellipse cx="23" cy="30" rx="13" ry="4.5" transform="rotate(-22 23 30)"/><ellipse cx="49" cy="46" rx="13" ry="4.5" transform="rotate(22 49 46)"/><ellipse cx="22" cy="62" rx="12" ry="4.5" transform="rotate(-18 22 62)"/><ellipse cx="49" cy="76" rx="12" ry="4.5" transform="rotate(18 49 76)"/></g>
+     <g fill="#cfc84a"><circle cx="30" cy="31" r="3"/><circle cx="42" cy="47" r="3"/><circle cx="29" cy="63" r="3"/><circle cx="42" cy="77" r="3"/></g>`),
+  seagrass: _sv('0 0 76 100',
+    `<g fill="none" stroke="#5cb46e" stroke-width="6" stroke-linecap="round"><path d="M22 100 L20 26"/><path d="M38 100 L38 16"/><path d="M54 100 L56 30"/><path d="M30 100 L28 40"/><path d="M46 100 L48 38"/></g>`),
+  sargassum: _sv('0 0 92 72',
+    `<path d="M8 42 Q40 22 84 36" fill="none" stroke="#9a7d2e" stroke-width="3"/>
+     <g fill="none" stroke="#a8892e" stroke-width="2.5" stroke-linecap="round"><path d="M22 36 q-3 -12 3 -18"/><path d="M38 27 q-2 -13 4 -18"/><path d="M54 27 q4 -12 1 -18"/><path d="M68 32 q5 -11 1 -17"/></g>
+     <g fill="#c9a63a"><circle cx="21" cy="17" r="4"/><circle cx="43" cy="8" r="4"/><circle cx="53" cy="8" r="4"/><circle cx="71" cy="14" r="4"/></g>
+     <g stroke="#8f7526" stroke-width="1" opacity="0.6"><line x1="16" y1="30" x2="20" y2="20"/><line x1="60" y1="26" x2="66" y2="18"/></g>`),
   redalgae: _sv('0 0 70 96',
-    `<g fill="none" stroke="#b5324f" stroke-width="4" stroke-linecap="round"><path d="M35 96 Q30 60 35 40"/><path d="M35 60 Q22 52 16 38"/><path d="M35 56 Q48 48 54 34"/><path d="M35 44 Q26 36 22 24"/><path d="M35 42 Q44 34 48 22"/><path d="M35 40 Q35 24 35 12"/></g>`),
+    `<circle cx="35" cy="93" r="4" fill="#7a2438"/><path d="M35 93 L35 60" stroke="#b5324f" stroke-width="3"/>
+     <g fill="none" stroke="#c94a68" stroke-width="1.6" stroke-linecap="round"><path d="M35 60 Q20 52 12 34"/><path d="M35 60 Q50 52 58 34"/><path d="M35 56 Q30 40 30 20"/><path d="M35 56 Q40 40 42 20"/><path d="M20 46 Q12 40 8 28"/><path d="M50 46 Q58 40 62 28"/><path d="M14 34 L9 24 M18 34 L15 22 M52 34 L57 24 M56 34 L59 22"/></g>`),
+  ulva: _sv('0 0 80 96',
+    `<path d="M40 96 Q37 72 41 60" stroke="#3fa83e" stroke-width="3" fill="none"/>
+     <path d="M41 60 Q10 50 14 20 Q28 26 34 44 Q28 12 44 6 Q50 30 44 46 Q58 18 70 26 Q60 48 41 58Z" fill="#5fc94e" opacity="0.92" stroke="#3fa83e" stroke-width="1"/>
+     <path d="M30 30 Q36 40 34 50 M50 24 Q46 38 46 48" stroke="#3fa83e" stroke-width="0.8" fill="none" opacity="0.6"/>`),
+  fucus: _sv('0 0 72 100',
+    `<circle cx="36" cy="97" r="4" fill="#6a5a22"/>
+     <g fill="none" stroke="#7a6a2e" stroke-width="6" stroke-linecap="round"><path d="M36 97 L36 62"/><path d="M36 62 Q28 46 22 22"/><path d="M36 62 Q44 46 50 22"/><path d="M27 46 Q23 34 20 16"/><path d="M45 46 Q49 34 52 16"/></g>
+     <g fill="#a8963a"><ellipse cx="21" cy="18" rx="4" ry="5"/><ellipse cx="27" cy="18" rx="4" ry="5"/><ellipse cx="45" cy="18" rx="4" ry="5"/><ellipse cx="51" cy="18" rx="4" ry="5"/></g>`),
+  caulerpa: _sv('0 0 94 92',
+    `<path d="M6 84 Q46 79 88 83" stroke="#2f8f4e" stroke-width="3.5" fill="none"/>
+     <g fill="none" stroke="#3fa860" stroke-width="2.4" stroke-linecap="round"><path d="M20 83 L20 36"/><path d="M42 83 L42 24"/><path d="M64 83 L66 40"/></g>
+     <g stroke="#5fc878" stroke-width="1.6" stroke-linecap="round"><g><line x1="20" y1="44" x2="12" y2="40"/><line x1="20" y1="44" x2="28" y2="40"/><line x1="20" y1="54" x2="12" y2="50"/><line x1="20" y1="54" x2="28" y2="50"/><line x1="20" y1="64" x2="13" y2="61"/><line x1="20" y1="64" x2="27" y2="61"/></g><g><line x1="42" y1="32" x2="34" y2="27"/><line x1="42" y1="32" x2="50" y2="27"/><line x1="42" y1="44" x2="34" y2="39"/><line x1="42" y1="44" x2="50" y2="39"/><line x1="42" y1="56" x2="34" y2="52"/><line x1="42" y1="56" x2="50" y2="52"/></g><g><line x1="65" y1="48" x2="58" y2="44"/><line x1="65" y1="48" x2="72" y2="44"/><line x1="66" y1="58" x2="59" y2="55"/><line x1="66" y1="58" x2="73" y2="55"/></g></g>`),
+  coralline: _sv('0 0 80 82',
+    `<g fill="none" stroke="#e07a9a" stroke-width="4.5" stroke-linecap="round"><path d="M40 82 L40 56"/><path d="M40 56 L26 36"/><path d="M40 56 L54 36"/><path d="M26 36 L18 20"/><path d="M26 36 L32 18"/><path d="M54 36 L48 18"/><path d="M54 36 L62 20"/></g>
+     <g fill="#f2b0c6"><circle cx="18" cy="20" r="3.2"/><circle cx="32" cy="18" r="3.2"/><circle cx="48" cy="18" r="3.2"/><circle cx="62" cy="20" r="3.2"/><circle cx="26" cy="36" r="3"/><circle cx="54" cy="36" r="3"/></g>
+     <g stroke="#c95a7e" stroke-width="0.8"><line x1="33" y1="50" x2="47" y2="50"/><line x1="22" y1="30" x2="30" y2="26"/><line x1="50" y1="26" x2="58" y2="30"/></g>`),
+  diatom: _sv('0 0 72 72',
+    `<ellipse cx="36" cy="36" rx="27" ry="15" fill="#bfe6d0" opacity="0.5" stroke="#7fc9a8" stroke-width="1.5"/>
+     <ellipse cx="36" cy="36" rx="20" ry="9" fill="none" stroke="#9fd8c0" stroke-width="0.8"/>
+     <g stroke="#7fc9a8" stroke-width="1"><line x1="14" y1="36" x2="58" y2="36"/><line x1="20" y1="26" x2="20" y2="46"/><line x1="28" y1="24" x2="28" y2="48"/><line x1="36" y1="23" x2="36" y2="49"/><line x1="44" y1="24" x2="44" y2="48"/><line x1="52" y1="27" x2="52" y2="45"/></g>`),
 };
 // имя объекта → ключ иллюстрации (иначе используется эмодзи)
 const ART_BY_NAME = {
@@ -324,9 +422,16 @@ const ART_BY_NAME = {
   'Медуза Атолла':'atolla','Морская лилия':'sealily','Марианский липарис':'snailfish','Китопад':'whalefall',
   'Наутилус':'nautilus','Чёрный живоглот':'swallower','Чёрный курильщик':'smoker','Батизавр':'bathysaurus',
   'Пластиковый пакет':'bag',
+  // медузы, моллюски, кальмары, рыба-топорик, кашалот
+  'Медуза львиная грива':'jelly_lions','Медуза пелагия':'jelly_pelagia','Гребневик':'jelly_comb','Медуза Deepstaria':'jelly_deepstaria',
+  'Осьминог':'octopus','Каракатица':'cuttlefish','Голожаберник':'nudibranch','Морской ангел (клионе)':'seaangel','Кальмар-светлячок':'fireflysquid',
+  'Адский вампир':'vampsquid','Гигантский кальмар':'giantsquid','Колоссальный кальмар':'colossalsquid','Рыба-топорик':'hatchetfish','Кашалот':'spermwhale',
+  // водоросли
+  'Диатомеи (фитопланктон)':'diatom','Фукус':'fucus','Морской салат (ульва)':'ulva','Каулерпа':'caulerpa','Кораллиновые водоросли':'coralline',
 };
 // объекты, которые иногда вспыхивают биолюминесценцией
-const BIOLUM = new Set(['Глубоководный удильщик','Медуза Атолла','Рыба-дракон','Рыба-гадюка','Мешкоглот']);
+const BIOLUM = new Set(['Глубоководный удильщик','Медуза Атолла','Рыба-дракон','Рыба-гадюка','Мешкоглот',
+  'Медуза пелагия','Гребневик','Кальмар-светлячок','Рыба-топорик','Адский вампир']);
 const MAXD = 10935, SCALE = 1.32, HEADER = 460;
 const yOf = d => HEADER + d * SCALE;
 
@@ -424,6 +529,23 @@ const OBJ = [
   [7062,'⚪','«Цзяолун» (Китай)','7062 м','Китайский обитаемый батискаф достиг в 2012 г. 7062 м в Марианской впадине.', WE('Jiaolong')],
   [6865,'🚢','Эсминец «Сэмюэл Робертс»','самый глубокий затонувший корабль','Обломки эсминца лежат на 6865 м — глубже любого другого найденного корабля (обнаружен в 2022 г.).', WE('USS_Samuel_B._Roberts_(DE-413)')],
   [10909,'🟠','«Фэндоучжэ» (Китай)','2020','Китайский батискаф «Стремящийся» с тремя учёными достиг дна в прямом эфире на 10 909 м.', WE('Fendouzhe')],
+  // — медузы —
+  [45,  '🪼','Медуза львиная грива','самая длинная в мире','Щупальца достигают 37 метров — длиннее синего кита. Обжигает даже оторванными и через часы после гибели.', W('Львиная_грива_(медуза)')],
+  [30,  '🪼','Медуза пелагия','светится в волнах','Фиолетовая медуза, вспыхивающая при малейшем движении воды. Жгучая; иногда сбивается в огромные рои.', W('Пелагия_ночесветка')],
+  [600, '🪼','Гребневик','радужные гребни','Не медуза: плывёт восемью рядами ресничек, которые переливаются всеми цветами радуги, и светится в темноте.', W('Гребневики')],
+  [2600,'🪼','Медуза Deepstaria','живой мешок','Огромный тонкий «мешок» без щупалец обволакивает добычу, как плёнка. Снят камерами лишь считаные разы.', WE('Deepstaria')],
+  // — моллюски —
+  [10,  '🐙','Осьминог','три сердца','У осьминога три сердца, голубая кровь и восемь рук, каждая из которых «пробует» всё на вкус.', W('Осьминоги')],
+  [15,  '🦑','Каракатица','мастер маскировки','Меняет цвет и рельеф кожи за доли секунды. Зрачок в форме буквы W, а «чернильная кость» помогает всплывать.', W('Каракатицы')],
+  [8,   '🐌','Голожаберник','ядовитая красота','Морской слизень крадёт стрекательные клетки съеденных медуз и носит их на спине — как чужое оружие.', W('Голожаберные')],
+  [120, '🦋','Морской ангел (клионе)','крылатый моллюск','Крошечный прозрачный моллюск «летает» в толще воды, взмахивая крыльями. Питается только «морскими чёртиками».', W('Клионе')],
+  [400, '🦑','Кальмар-светлячок','светится синим','Японский кальмар усыпан синими фонариками. Весной миллионы всплывают на нерест и зажигают всё побережье.', W('Watasenia_scintillans')],
+  // — водоросли (виды) —
+  [0,   '🦠','Диатомеи (фитопланктон)','стеклянные домики','Микроводоросли в панцирях из чистого кремнезёма — «стекла». Вместе с другим планктоном дают до половины кислорода Земли.', W('Диатомовые_водоросли')],
+  [2,   '🌿','Фукус','пузырчатые ветви','Бурая водоросль с парными воздушными пузырями: они держат ветви на плаву во время прилива.', W('Фукус')],
+  [5,   '🥬','Морской салат (ульва)','съедобные листы','Ярко-зелёные листы толщиной всего в две клетки. Съедобна, растёт на камнях у самого берега.', W('Ульва')],
+  [12,  '🌿','Каулерпа','одна гигантская клетка','Перистая зелёная водоросль — по сути одна огромная клетка с тысячами ядер, без перегородок.', W('Каулерпа')],
+  [35,  '🪸','Кораллиновые водоросли','каменные растения','Красные водоросли, пропитанные известью до твёрдости камня; строят рифы наравне с кораллами.', W('Кораллиновые_водоросли')],
 ];
 Object.assign(ART_BY_NAME, {
   'Торпеда «Шквал»':'torpedo','Подлодка «Вирджиния» (США)':'sub_us','«Тайфун» (проект 941, СССР)':'sub_ussr',
@@ -672,6 +794,13 @@ const bubbles=[]; for(let i=0;i<44;i++) bubbles.push({x:Math.random(),y:Math.ran
 const micro=[]; for(let i=0;i<52;i++) micro.push({x:Math.random(),y:Math.random(),r:Math.random()*1.3+0.5,s:Math.random()*0.25+0.1});
 const schools=[{dMin:15,dMax:240,y:0.40,x:Math.random(),spd:120,col:'rgba(214,230,242,'},
                {dMin:250,dMax:940,y:0.58,x:Math.random(),spd:80,col:'rgba(150,188,214,'}];
+// дрейфующие силуэты медуз (фон)
+const dJel=[]; for(let i=0;i<7;i++) dJel.push({x:Math.random(),y:Math.random(),r:14+Math.random()*22,
+  sp:0.02+Math.random()*0.05,ph:Math.random()*6,hue:['180,220,255','200,180,255','255,190,210'][i%3]});
+// планктон у поверхности (зелёные искры)
+const plank=[]; for(let i=0;i<60;i++) plank.push({x:Math.random(),y:Math.random(),r:Math.random()*1.4+0.4,tw:Math.random()*6});
+// крупные проплывающие силуэты (кит/акула вдалеке)
+let passer=null, passT=6;
 const flashes=[]; let ft=0;
 function fxLoop(){
   ft+=0.016; const d=curDepth();
@@ -728,6 +857,57 @@ function fxLoop(){
     }
     fctx.globalAlpha=1;
   });
+
+  // планктон-искры у поверхности
+  if(d<180){ const pa=1-d/180;
+    for(const p of plank){ p.y-=0.0004; if(p.y<0){p.y=1;p.x=Math.random();}
+      const tw=0.4+0.6*Math.abs(Math.sin(ft*1.6+p.tw));
+      fctx.globalAlpha=0.5*pa*tw; fctx.fillStyle='#a8f0c0';
+      fctx.beginPath(); fctx.arc(p.x*FW,p.y*FH,p.r,0,7); fctx.fill(); }
+    fctx.globalAlpha=1;
+  }
+
+  // дрейфующие силуэты медуз — сумеречная и полуночная зоны
+  if(d>150 && d<4200){ const ja=Math.max(0,Math.min(1,(d-150)/200,(4200-d)/500));
+    for(const j of dJel){ j.y-=j.sp*0.004; if(j.y<-0.1){j.y=1.1;j.x=Math.random();}
+      const x=j.x*FW+Math.sin(ft*0.3+j.ph)*18, y=j.y*FH, pulse=1+0.12*Math.sin(ft*1.6+j.ph);
+      fctx.globalAlpha=0.10*ja;
+      fctx.fillStyle=`rgba(${j.hue},1)`;
+      fctx.beginPath(); fctx.ellipse(x,y,j.r*pulse,j.r*0.7*pulse,0,Math.PI,0); fctx.fill();
+      fctx.globalAlpha=0.07*ja; fctx.strokeStyle=`rgba(${j.hue},1)`; fctx.lineWidth=1.4;
+      for(let k=-2;k<=2;k++){ fctx.beginPath(); fctx.moveTo(x+k*j.r*0.32,y);
+        fctx.quadraticCurveTo(x+k*j.r*0.4+Math.sin(ft*2+k)*4,y+j.r*1.4,x+k*j.r*0.3,y+j.r*2.1); fctx.stroke(); }
+    }
+    fctx.globalAlpha=1;
+  }
+
+  // крупный силуэт вдалеке проплывает изредка (кит/акула), в верхних слоях
+  passT-=0.016;
+  if(!passer && passT<0 && d<1600){ passer={x:-0.2,y:0.25+Math.random()*0.4,dir:Math.random()<0.5?1:-1,
+    sp:0.03+Math.random()*0.03,sc:0.8+Math.random()*0.8,kind:Math.random()<0.5?'whale':'shark'};
+    if(passer.dir<0) passer.x=1.2; passT=14+Math.random()*16; }
+  if(passer){ passer.x+=passer.dir*passer.sp*0.016;
+    if(passer.x<-0.35||passer.x>1.35) passer=null;
+    else { const x=passer.x*FW,y=passer.y*FH,s=passer.sc*Math.min(FW,FH)*0.18,dr=passer.dir;
+      fctx.save(); fctx.translate(x,y); fctx.scale(dr*s/100,s/100);
+      fctx.globalAlpha=0.13; fctx.fillStyle='#0a1a2a';
+      if(passer.kind==='whale'){
+        fctx.beginPath(); fctx.moveTo(-52,0); fctx.quadraticCurveTo(-20,-18,30,-9);
+        fctx.quadraticCurveTo(48,-6,58,0); fctx.quadraticCurveTo(48,7,30,10);
+        fctx.quadraticCurveTo(-20,18,-52,0); fctx.closePath(); fctx.fill();
+        fctx.beginPath(); fctx.moveTo(-52,0); fctx.lineTo(-70,-14); fctx.lineTo(-64,2);
+        fctx.lineTo(-70,14); fctx.closePath(); fctx.fill();
+        fctx.beginPath(); fctx.moveTo(6,9); fctx.lineTo(2,26); fctx.lineTo(20,12); fctx.closePath(); fctx.fill();
+      } else {
+        fctx.beginPath(); fctx.moveTo(-46,0); fctx.quadraticCurveTo(-10,-13,44,-3);
+        fctx.quadraticCurveTo(52,-2,60,-9); fctx.lineTo(56,0); fctx.lineTo(60,9);
+        fctx.quadraticCurveTo(52,2,44,3); fctx.quadraticCurveTo(-10,13,-46,0); fctx.closePath(); fctx.fill();
+        fctx.beginPath(); fctx.moveTo(4,-8); fctx.lineTo(10,-30); fctx.lineTo(22,-8); fctx.closePath(); fctx.fill();
+        fctx.beginPath(); fctx.moveTo(0,7); fctx.lineTo(4,22); fctx.lineTo(16,9); fctx.closePath(); fctx.fill();
+      }
+      fctx.restore();
+    }
+  }
 
   // биолюминесцентные вспышки — во тьме ниже 800 м
   if(d>800 && Math.random()<0.06) flashes.push({x:Math.random()*FW,y:Math.random()*FH,life:1,
