@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Марианский лифт</title>
+<style>
+  :root { --paper:#fdf6ec; }
+  * { box-sizing: border-box; }
+  html, body { margin:0; height:100%; font-family:"Trebuchet MS","Segoe UI",Roboto,Arial,sans-serif; overscroll-behavior:none; }
+  body { background:#01040a; color:#eaf6ff; }
+
+  /* Скролл-океан */
+  #ocean { position:fixed; inset:0; overflow-y:scroll; overflow-x:hidden; scroll-behavior:auto; }
+  #track { position:relative; width:100%; }
+  /* Градиент воды рисуем отдельным фиксированным слоем, чтобы он тянулся под скролл */
+  #water { position:absolute; left:0; right:0; top:0; }
+
+  .zone-banner { position:absolute; left:50%; transform:translateX(-50%); width:min(560px,86vw);
+    background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.18); border-radius:14px;
+    padding:16px 20px; text-align:center; backdrop-filter:blur(2px); }
+  .zone-banner b { display:block; font-size:20px; letter-spacing:.5px; margin-bottom:6px; }
+  .zone-banner span { font-size:14.5px; line-height:1.5; opacity:.92; }
+  .zone-depth { font-size:12px; opacity:.6; margin-top:8px; letter-spacing:1px; }
+
+  .obj { position:absolute; transform:translateX(-50%); text-align:center; cursor:pointer;
+    -webkit-tap-highlight-color:transparent; }
+  .obj .icon { font-size:54px; line-height:1; filter:drop-shadow(0 4px 10px rgba(0,0,0,.5));
+    animation:bob var(--dur,5s) ease-in-out infinite alternate; display:inline-block; }
+  .obj .cap { margin-top:6px; font-size:14px; font-weight:700; text-shadow:0 1px 4px #000; }
+  .obj .sub { font-size:11.5px; opacity:.7; text-shadow:0 1px 4px #000; max-width:170px; margin:2px auto 0; }
+  .obj:hover .icon { animation-play-state:paused; transform:scale(1.08); }
+  @keyframes bob { from{ transform:translateY(0) rotate(var(--r1,-3deg)); } to{ transform:translateY(-8px) rotate(var(--r2,3deg)); } }
+
+  /* Биолюминесценция */
+  .glow { position:absolute; width:4px; height:4px; border-radius:50%; background:#9ff;
+    box-shadow:0 0 6px 2px #6ef; animation:tw var(--tw,4s) ease-in-out infinite alternate; opacity:.5; }
+  @keyframes tw { from{opacity:.15; transform:scale(.6);} to{opacity:.9; transform:scale(1.1);} }
+
+  /* Кабина-батискаф */
+  #cabin { position:fixed; left:14px; top:50%; transform:translateY(-50%); width:64px; z-index:40;
+    cursor:grab; touch-action:none; user-select:none; }
+  body.drag #cabin { cursor:grabbing; }
+  #cabin svg { display:block; width:100%; filter:drop-shadow(0 6px 14px rgba(0,0,0,.55)); }
+  #cable { position:fixed; left:45px; top:0; width:3px; background:linear-gradient(#c9d6e3,#8fa6b8); z-index:39; }
+
+  /* HUD */
+  #hud { position:fixed; top:12px; right:14px; z-index:60; display:flex; gap:8px; align-items:stretch; }
+  .gauge { background:rgba(3,12,26,.72); border:1px solid rgba(255,255,255,.14); border-radius:12px;
+    padding:8px 12px; min-width:78px; text-align:center; cursor:default; }
+  .gauge.click { cursor:pointer; }
+  .gauge .lbl { font-size:10px; letter-spacing:1px; text-transform:uppercase; opacity:.6; }
+  .gauge .val { font-size:19px; font-weight:800; margin-top:2px; font-variant-numeric:tabular-nums; }
+  .gauge .unit { font-size:11px; opacity:.7; }
+  #zone-tag { position:fixed; top:12px; left:50%; transform:translateX(-50%); z-index:60;
+    background:rgba(3,12,26,.72); border:1px solid rgba(255,255,255,.14); border-radius:999px;
+    padding:7px 16px; font-size:13px; font-weight:700; letter-spacing:.4px; }
+  #sound { position:fixed; top:14px; right:0; }
+  #sound-btn { position:fixed; top:15px; right:296px; z-index:60; width:34px; height:34px; border-radius:50%;
+    border:1px solid rgba(255,255,255,.14); background:rgba(3,12,26,.72); color:#eaf6ff; cursor:pointer;
+    font-size:16px; line-height:1; }
+
+  /* Заголовки-коллажи */
+  .collage { position:absolute; left:50%; transform:translateX(-50%); text-align:center; width:92vw; }
+  .chip { display:inline-block; background:var(--paper); color:#1d1d1b; padding:4px 9px 6px; margin:3px 2px;
+    border-radius:3px; box-shadow:1px 2px 4px rgba(0,0,0,.35); font-weight:900; }
+  .collage .word { display:inline-block; white-space:nowrap; margin:0 6px; }
+
+  /* Попап */
+  #ov { position:fixed; inset:0; background:rgba(2,8,20,.55); z-index:9998; opacity:0; pointer-events:none;
+    transition:opacity .2s; }
+  #ov.on { opacity:1; pointer-events:auto; }
+  #pop { position:fixed; left:50%; top:50%; transform:translate(-50%,-50%) scale(.92); z-index:9999;
+    width:min(440px,calc(100vw - 40px)); background:var(--paper); color:#1d1d1b; border-radius:16px;
+    padding:24px 26px 20px; box-shadow:0 18px 50px rgba(0,0,0,.5); opacity:0; pointer-events:none;
+    transition:opacity .2s, transform .2s; }
+  #pop.on { opacity:1; pointer-events:auto; transform:translate(-50%,-50%) scale(1); }
+  #pop h3 { margin:0 28px 6px 0; font-size:21px; }
+  #pop .badge { display:inline-block; background:#e6f0ff; color:#244b91; font-size:12px; font-weight:700;
+    padding:4px 10px; border-radius:999px; margin-bottom:12px; }
+  #pop p { margin:0 0 14px; font-size:15px; line-height:1.55; }
+  #pop a { color:#2456c4; font-weight:700; font-size:14px; text-decoration:none; border-bottom:1.5px solid #2456c4; }
+  #pop .x { position:absolute; top:12px; right:14px; border:none; background:none; font-size:22px; cursor:pointer; color:#888; }
+  #pop .x:hover { color:#1d1d1b; }
+  .hint { position:fixed; bottom:14px; left:50%; transform:translateX(-50%); z-index:50; font-size:12px;
+    opacity:.55; text-align:center; }
+</style>
+</head>
+<body>
+
+<div id="ocean"><div id="track"><div id="water"></div></div></div>
+
+<div id="cable"></div>
+<div id="cabin" title="Тяните, чтобы погружаться"></div>
+
+<div id="zone-tag">Поверхность</div>
+<button id="sound-btn" title="Звук глубины">🔈</button>
+<div id="hud">
+  <div class="gauge" id="g-depth"><div class="lbl">Глубина</div><div class="val" id="v-depth">0</div><div class="unit">метров</div></div>
+  <div class="gauge click" id="g-press"><div class="lbl">Давление</div><div class="val" id="v-press">1</div><div class="unit">атм</div></div>
+  <div class="gauge click" id="g-temp"><div class="lbl">Темп.</div><div class="val" id="v-temp">24</div><div class="unit">°C</div></div>
+</div>
+
+<div class="hint">Крутите вниз или тяните батискаф ↓</div>
+
+<div id="ov"></div>
+<div id="pop"><button class="x" aria-label="Закрыть">✕</button><h3></h3><div class="badge"></div><p></p><a target="_blank" rel="noopener">Подробнее в Википедии →</a></div>
+
+<script>
+const W = s => 'https://ru.wikipedia.org/wiki/' + encodeURIComponent(s);
+const MAXD = 10935, SCALE = 1.32, HEADER = 460;
+const yOf = d => HEADER + d * SCALE;
+
+// ---- зоны ----
+const ZONES = [
+  { d0:0,    d1:200,   name:'Солнечная зона', color:['#6fc4ef','#3f9fd6'] },
+  { d0:200,  d1:1000,  name:'Сумеречная зона', color:['#3f9fd6','#12507e'] },
+  { d0:1000, d1:4000,  name:'Полуночная зона', color:['#12507e','#06233c'] },
+  { d0:4000, d1:6000,  name:'Бездна', color:['#06233c','#03121f'] },
+  { d0:6000, d1:MAXD,  name:'Хадаль · Марианская впадина', color:['#03121f','#01060d'] },
+];
+const zoneAt = d => ZONES.find(z => d < z.d1) || ZONES[ZONES.length-1];
+
+const BANNERS = [
+  { d:70,   b:'Солнечная зона · эпипелагиаль', s:'Пристегните ремни. Лифт идёт вниз — и только вниз. Пока солнца хватает на фотосинтез, здесь кипит почти вся жизнь океана.', depth:'0–200 м' },
+  { d:340,  b:'Сумеречная зона · мезопелагиаль', s:'Краски закончились — дальше всё синее, потом чёрное. Многие животные тут сами зажигают свет.', depth:'200–1000 м' },
+  { d:1300, b:'Полуночная зона · батипелагиаль', s:'Вечная тьма и холод. Солнечный луч сюда не проникал никогда. Еды мало — у хищников огромные пасти и светящиеся приманки.', depth:'1000–4000 м' },
+  { d:4400, b:'Бездна · абиссопелагиаль', s:'Плоские илистые равнины укрывают больше половины планеты. Давление — сотни атмосфер, а жизнь всё равно есть.', depth:'4000–6000 м' },
+  { d:6300, b:'Хадаль · глубоководные желоба', s:'Названа в честь Аида, царства мёртвых. Обнадёживает, да? Впереди — самая глубокая точка Земли.', depth:'6000–10 935 м' },
+];
+
+// ---- объекты (глубина, эмодзи, имя, подпись, факт, ссылка) ----
+const OBJ = [
+  [0,   '🛟','Поверхность','уровень моря','Точка отсчёта. Отсюда — 11 километров вниз, к самой глубокой точке планеты.', W('Марианская_впадина')],
+  [4,   '⛵','Лодка','спусковая площадка','С таких судов батискафы уходят под воду и на них же поднимают обратно.', W('Батискаф')],
+  [3,   '🏊','Пловец','поверхность','Без снаряжения человек комфортно держится лишь у самой поверхности.', W('Плавание')],
+  [12,  '🐢','Зелёная черепаха','ныряет на десятки метров','Может задерживать дыхание на несколько часов и спать под водой.', W('Зелёная_черепаха')],
+  [18,  '🐠','Рифовые рыбы','верхний слой','Самый населённый и красочный слой океана — сюда доходит достаточно света.', W('Коралловый_риф')],
+  [25,  '🐬','Дельфин','до 200+ м','Ныряет за рыбой, ориентируясь эхолокацией — «видит» звуком.', W('Дельфины')],
+  [40,  '🤿','Аквалангист','предел любителя','Рекреационный дайвинг — примерно до 40 м. Глубже нужны газовые смеси.', W('Дайвинг')],
+  [55,  '🦈','Акула','хищник верхних вод','Большинство акул охотится в освещённом слое, но некоторые уходят на сотни метров.', W('Акулы')],
+  [214, '🫁','Рекорд фридайвинга','214 м на одном вдохе','Херберт Ницш в 2007 году погрузился на 214 м без акваланга (категория No-Limits).', W('Фридайвинг')],
+  [250, '🐟','Рыба-топорик','светящееся брюшко','Плоское серебристое тельце и свет на брюхе прячут её от хищников снизу.', W('Топориковые')],
+  [330, '🛥️','Подводная лодка','рабочая глубина','Боевые субмарины обычно работают на 250–500 м — глубже корпус раздавит.', W('Подводная_лодка')],
+  [520, '🦑','Кальмар','ночной мигрант','Днём прячется в темноте, а ночью поднимается к поверхности кормиться.', W('Кальмары')],
+  [780, '🦑','Адский вампир','600–900 м','Не вампир: питается «морским снегом». Живёт там, где почти нет кислорода.', W('Адский_вампир')],
+  [700, '🎣','Глубоководный удильщик','светящаяся удочка','Приманивает добычу светящимся отростком. Самец в сотни раз мельче самки.', W('Удильщикообразные')],
+  [900, '🐡','Мешкоглот','пасть больше тела','Пеликаний угорь заглатывает добычу крупнее себя, раздувая гигантский рот.', W('Мешкоглотовые')],
+  [1000,'🦑','Гигантский кальмар','до 13 м','Глаз размером с обеденную тарелку — крупнейший в животном мире.', W('Гигантский_кальмар')],
+  [1200,'🐟','Рыба-гадюка','клыки не влезают в пасть','Длинные прозрачные зубы и светящаяся приманка на спинном плавнике.', W('Хаулиоды')],
+  [1500,'🐉','Рыба-дракон','светит красным','Излучает красный свет, невидимый для добычи, и подсвечивает её, как прибором ночного видения.', W('Стомиевые')],
+  [2000,'🦐','Гигантский изопод','размером с кошку','Родственник мокрицы. Может не есть несколько лет подряд.', W('Bathynomus')],
+  [2400,'🐋','Кашалот','ныряет глубже всех','Погружается почти на 3 км в охоте на кальмаров, задерживая дыхание больше часа.', W('Кашалот')],
+  [2200,'🦑','Колоссальный кальмар','тяжелее гигантского','На щупальцах — вращающиеся крючья. Главная добыча кашалота.', W('Колоссальный_кальмар')],
+  [3800,'🚢','«Титаник»','лежит с 1912 года','Обломки лайнера покоятся на 3800 м. Найдены только в 1985-м.', W('Титаник')],
+  [4200,'🐙','Осьминог Дамбо','«ушки»-плавники','Самый глубоководный осьминог, встречается до 7000 м. Машет плавниками, как слонёнок ушами.', W('Grimpoteuthis')],
+  [4600,'🥒','Морской огурец','пылесос дна','Голотурия пропускает донный ил через себя, извлекая крохи питательного.', W('Голотурии')],
+  [5200,'🔱','Рыба-тренога','стоит на «ходулях»','Опирается на дно тремя длинными лучами плавников и ждёт, когда течение принесёт еду.', W('Bathypterois')],
+  [6500,'🛰️','«Синкай-6500»','научный батискаф','Японский обитаемый аппарат — один из самых глубоководных исследовательских.', W('Синкай-6500')],
+  [8336,'🐟','Марианский липарис','самая глубокая рыба','Снят на видео на рекордных 8336 м. Студенистое тело не сминается под давлением.', W('Липаровые')],
+  [8849,'🏔️','Отметка «Эверест»','8849 м','Переверни Эверест и опусти сюда — вершина не достанет до дна ещё ~2 км.', W('Джомолунгма')],
+  [10000,'🦠','Амфиподы и ксенофиофоры','хозяева дна','Гигантские рачки-бокоплавы и одноклеточные размером с кулак живут там, где больше почти никого нет.', W('Ксенофиофоры')],
+  [10898,'🛍️','Пластиковый пакет','след человека','На дне впадины нашли полиэтиленовый пакет. Мусор добрался и сюда.', W('Загрязнение_океана')],
+  [10911,'🔵','Батискаф «Триест»','1960','Жак Пикар и Дон Уолш первыми достигли дна Бездны Челленджера.', W('Триест_(батискаф)')],
+  [10908,'🎥','Deepsea Challenger','2012','Джеймс Кэмерон совершил первое одиночное погружение на дно.', W('Deepsea_Challenger')],
+  [10935,'🏁','ДНО · Бездна Челленджера','самая глубокая точка Земли','Глубже на планете уже некуда. Давление здесь около 1071 атмосферы. Поздравляем — вы на дне!', W('Бездна_Челленджера')],
+];
+
+// ---- приборы ----
+const pressureAt = d => 1 + d/10;
+function tempAt(d){
+  if (d < 200) return 24 - 0.02*d;            // 24 → 20
+  if (d < 1000) return 20 - (d-200)/800*16;   // 20 → 4
+  return Math.max(1.5, 4 - (d-1000)/10000*2.5);
+}
+
+// ---- построение сцены ----
+const track = document.getElementById('track');
+const water = document.getElementById('water');
+
+// Раскладка объектов: по реальной глубине, но с минимальным зазором, чтобы
+// приповерхностная толкучка не слипалась. Затем строим двустороннее
+// соответствие «пиксель ↔ глубина», чтобы приборы совпадали с тем, что видно.
+const MINGAP = 104;
+const items = OBJ.map((o,i)=>({o,i,d:o[0]})).sort((a,b)=>a.d-b.d);
+let prevY = -1e9;
+items.forEach(it=>{ it.y = Math.max(yOf(it.d), prevY + MINGAP); prevY = it.y; });
+const lastY = items[items.length-1].y;
+const TOTAL = lastY + 620;
+
+// контрольные точки (y,d), строго возрастающие
+const CP = [{y:0,d:0},{y:HEADER,d:0}];
+items.forEach(it=>{ if(it.y > CP[CP.length-1].y) CP.push({y:it.y,d:it.d}); });
+if (CP[CP.length-1].d < MAXD) CP.push({y:TOTAL,d:MAXD});
+function interp(pts, key, val, other){
+  if (val <= pts[0][key]) return pts[0][other];
+  for (let i=1;i<pts.length;i++){ if (val <= pts[i][key]){
+    const a=pts[i-1], b=pts[i], t=(val-a[key])/((b[key]-a[key])||1);
+    return a[other] + t*(b[other]-a[other]);
+  }}
+  return pts[pts.length-1][other];
+}
+const depthAtY = y => Math.max(0, Math.min(MAXD, interp(CP,'y',y,'d')));
+const yAtDepth = d => interp(CP,'d',d,'y');
+
+track.style.height = TOTAL + 'px';
+water.style.height = TOTAL + 'px';
+// градиент воды по зонам (в координатах раскладки)
+let stops = ['#8fd4f5 0px'];
+ZONES.forEach(z => { stops.push(`${z.color[0]} ${Math.round(yAtDepth(z.d0))}px`); stops.push(`${z.color[1]} ${Math.round(yAtDepth(z.d1))}px`); });
+stops.push('#01060d ' + TOTAL + 'px');
+water.style.background = 'linear-gradient(to bottom,' + stops.join(',') + ')';
+
+// заголовок-коллаж
+function collage(text, size){
+  const cols=['#f2542d','#e63946','#ff7bac','#ffd23f','#2a9d8f','#2456c4','#7b2d8b','#43a047','#59c3e8','#d97706'];
+  const fonts=['Impact','Georgia','Arial Black','Courier New','Times New Roman','Verdana','Trebuchet MS'];
+  let i=0, html='';
+  text.split(' ').forEach(word=>{
+    html+='<span class="word">';
+    for(const ch of word){
+      const rot=(Math.random()*10-5).toFixed(1);
+      html+=`<span class="chip" style="color:${cols[i%cols.length]};font-family:'${fonts[i%fonts.length]}',sans-serif;`+
+            `font-size:${size}px;transform:rotate(${rot}deg)">${ch}</span>`;
+      i++;
+    }
+    html+='</span>';
+  });
+  return html;
+}
+function addCollage(text, topPx, size){
+  const el=document.createElement('div'); el.className='collage'; el.style.top=topPx+'px';
+  el.innerHTML=collage(text,size); track.appendChild(el);
+}
+addCollage('МАРИАНСКАЯ ВПАДИНА', 150, 40);
+addCollage('ВЫ НА ДНЕ', yAtDepth(MAXD)+150, 62);
+
+// баннеры зон
+BANNERS.forEach(z=>{
+  const el=document.createElement('div'); el.className='zone-banner'; el.style.top=yAtDepth(z.d)+'px';
+  el.innerHTML=`<b>${z.b}</b><span>${z.s}</span><div class="zone-depth">${z.depth}</div>`;
+  track.appendChild(el);
+});
+
+// объекты — чередуем стороны, чтобы близкие по глубине не пересекались
+const lanes=[24,66,40,58,30,72,48];
+items.forEach((it,k)=>{
+  const [d,icon,name,sub,fact,url]=it.o;
+  const el=document.createElement('div'); el.className='obj';
+  el.style.top=it.y+'px'; el.style.left=lanes[k%lanes.length]+'vw';
+  el.style.setProperty('--dur',(4+Math.random()*3).toFixed(2)+'s');
+  el.style.setProperty('--r1',(-4+Math.random()*2).toFixed(1)+'deg');
+  el.style.setProperty('--r2',(2+Math.random()*3).toFixed(1)+'deg');
+  el.innerHTML=`<div class="icon">${icon}</div><div class="cap">${name}</div><div class="sub">${sub}</div>`;
+  el.addEventListener('click',()=>openPop({t:name, d:fact, u:url, badge:d.toLocaleString('ru-RU')+' м · '+Math.round(pressureAt(d))+' атм'}));
+  track.appendChild(el);
+});
+
+// биолюминесценция ниже 800 м
+const bioStart=yAtDepth(800);
+for(let k=0;k<140;k++){
+  const g=document.createElement('div'); g.className='glow';
+  g.style.top=(bioStart+Math.random()*(TOTAL-bioStart))+'px';
+  g.style.left=(Math.random()*100)+'vw';
+  g.style.setProperty('--tw',(2.5+Math.random()*4).toFixed(1)+'s');
+  g.style.animationDelay=(-Math.random()*5)+'s';
+  const hue=Math.random()<.5?'#9ff':(Math.random()<.5?'#7dffcf':'#bfa0ff');
+  g.style.background=hue; g.style.boxShadow=`0 0 6px 2px ${hue}`;
+  track.appendChild(g);
+}
+
+// кабина-батискаф (SVG)
+document.getElementById('cabin').innerHTML = `
+<svg viewBox="0 0 80 96" xmlns="http://www.w3.org/2000/svg">
+  <rect x="30" y="0" width="20" height="16" fill="#ffce3a" stroke="#c99a12" stroke-width="1.5"/>
+  <ellipse cx="40" cy="52" rx="30" ry="34" fill="#ffd23f" stroke="#c99a12" stroke-width="2.5"/>
+  <ellipse cx="40" cy="52" rx="30" ry="34" fill="url(#sh)"/>
+  <circle cx="40" cy="50" r="16" fill="#0b2a44" stroke="#08304f" stroke-width="3"/>
+  <circle cx="40" cy="50" r="12" fill="#173d5c"/>
+  <circle cx="35" cy="45" r="4" fill="#bfe6ff" opacity=".8"/>
+  <circle cx="40" cy="50" r="3.2" fill="#eafaff"/>
+  <rect x="14" y="78" width="12" height="14" rx="3" fill="#e15b2d"/>
+  <rect x="54" y="78" width="12" height="14" rx="3" fill="#e15b2d"/>
+  <defs><radialGradient id="sh" cx="35%" cy="30%"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>
+</svg>`;
+
+// ---- HUD обновление ----
+const ocean=document.getElementById('ocean');
+const vDepth=document.getElementById('v-depth'), vPress=document.getElementById('v-press'),
+      vTemp=document.getElementById('v-temp'), zoneTag=document.getElementById('zone-tag'),
+      cable=document.getElementById('cable'), cabin=document.getElementById('cabin');
+// состояние звука объявляем заранее — render() ссылается на SOUND
+let SOUND=false, actx=null, osc=null, gain=null;
+function updateDrone(d){ if(!osc)return; osc.frequency.value=90 - d/MAXD*55; }
+
+function curDepth(){
+  return depthAtY(ocean.scrollTop + window.innerHeight*0.5);
+}
+function render(){
+  const d=curDepth();
+  vDepth.textContent=Math.round(d).toLocaleString('ru-RU');
+  vPress.textContent=Math.round(pressureAt(d)).toLocaleString('ru-RU');
+  vTemp.textContent=tempAt(d).toFixed(d<1000?0:1);
+  zoneTag.textContent=zoneAt(d).name;
+  // кабина опускается к центру, кабель тянется сверху
+  const cy=window.innerHeight*0.5;
+  cabin.style.top=cy+'px';
+  cable.style.height=cy+'px';
+  if(SOUND) updateDrone(d);
+}
+ocean.addEventListener('scroll',render,{passive:true});
+window.addEventListener('resize',render);
+render();
+
+// ---- перетаскивание кабины ----
+let drag=false, sy=0, ss=0, vel=0, ly=0, lt=0, inertia=null;
+function stopInertia(){ if(inertia){cancelAnimationFrame(inertia);inertia=null;} }
+cabin.addEventListener('pointerdown',e=>{
+  drag=true; sy=ly=e.clientY; ss=ocean.scrollTop; lt=performance.now(); vel=0;
+  document.body.classList.add('drag'); stopInertia();
+  try{cabin.setPointerCapture(e.pointerId);}catch(_){}
+});
+window.addEventListener('pointermove',e=>{
+  if(!drag)return;
+  ocean.scrollTop=ss+(e.clientY-sy)*4.2;
+  const now=performance.now(), dt=Math.max(now-lt,8);
+  vel=vel*0.7+((ly-e.clientY)/dt)*0.3; vel=Math.max(-3,Math.min(3,vel));
+  ly=e.clientY; lt=now;
+});
+function endDrag(){ if(!drag)return; drag=false; document.body.classList.remove('drag');
+  let v=vel*4.2;
+  (function step(){ v*=0.94; if(Math.abs(v)<0.4){inertia=null;return;}
+    ocean.scrollTop-=Math.max(-60,Math.min(60,v*16)); inertia=requestAnimationFrame(step); })();
+}
+window.addEventListener('pointerup',endDrag);
+window.addEventListener('pointercancel',endDrag);
+
+// ---- попапы ----
+const ov=document.getElementById('ov'), pop=document.getElementById('pop');
+function openPop(info){
+  pop.querySelector('h3').textContent=info.t;
+  pop.querySelector('.badge').textContent=info.badge||'';
+  pop.querySelector('.badge').style.display=info.badge?'inline-block':'none';
+  pop.querySelector('p').textContent=info.d;
+  const a=pop.querySelector('a');
+  if(info.u){ a.href=info.u; a.style.display='inline-block'; } else a.style.display='none';
+  ov.classList.add('on'); pop.classList.add('on');
+}
+function closePop(){ ov.classList.remove('on'); pop.classList.remove('on'); }
+ov.addEventListener('click',closePop);
+pop.querySelector('.x').addEventListener('click',closePop);
+document.addEventListener('keydown',e=>{ if(e.key==='Escape')closePop(); });
+
+// приборы кликабельны
+document.getElementById('g-press').addEventListener('click',()=>{
+  const d=curDepth();
+  openPop({t:'Почему такое давление?', badge:Math.round(d).toLocaleString('ru-RU')+' м · '+Math.round(pressureAt(d))+' атм',
+    d:'Каждые 10 метров воды добавляют примерно одну атмосферу. На дне впадины давление достигает ~1071 атм — как если поставить легковой автомобиль на кончик пальца. Живые организмы выдерживают его, потому что сами состоят в основном из несжимаемой воды.',
+    u:W('Гидростатическое_давление')});
+});
+document.getElementById('g-temp').addEventListener('click',()=>{
+  const d=curDepth();
+  openPop({t:'Почему такая температура?', badge:Math.round(d).toLocaleString('ru-RU')+' м · '+tempAt(d).toFixed(1)+' °C',
+    d:'Солнце прогревает лишь верхние метры. В слое 200–1000 м (термоклин) температура резко падает, а глубже держится около +1…+4 °C по всему океану. Исключение — гидротермальные источники на дне, где вода бьёт с температурой в сотни градусов.',
+    u:W('Термоклин')});
+});
+
+// ---- звук глубины (WebAudio, по желанию) ----
+document.getElementById('sound-btn').addEventListener('click',function(){
+  SOUND=!SOUND;
+  if(SOUND){
+    actx=actx||new (window.AudioContext||window.webkitAudioContext)();
+    osc=actx.createOscillator(); gain=actx.createGain();
+    osc.type='sine'; gain.gain.value=0.06; osc.connect(gain).connect(actx.destination);
+    updateDrone(curDepth()); osc.start(); this.textContent='🔊';
+  } else { try{osc.stop();}catch(_){} osc=null; this.textContent='🔈'; }
+});
+</script>
+</body>
+</html>
