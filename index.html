@@ -59,21 +59,80 @@
   #cabin svg { display:block; width:100%; filter:drop-shadow(0 6px 14px rgba(0,0,0,.55)); }
   #cable { position:fixed; left:45px; top:0; width:3px; background:linear-gradient(#c9d6e3,#8fa6b8); z-index:39; }
 
-  /* HUD */
-  #hud { position:fixed; top:12px; right:14px; z-index:60; display:flex; gap:8px; align-items:stretch; }
-  .gauge { background:rgba(3,12,26,.72); border:1px solid rgba(255,255,255,.14); border-radius:12px;
-    padding:8px 12px; min-width:78px; text-align:center; cursor:default; }
-  .gauge.click { cursor:pointer; }
-  .gauge .lbl { font-size:10px; letter-spacing:1px; text-transform:uppercase; opacity:.6; }
-  .gauge .val { font-size:19px; font-weight:800; margin-top:2px; font-variant-numeric:tabular-nums; }
-  .gauge .unit { font-size:11px; opacity:.7; }
+  /* ПРИБОРНАЯ ПАНЕЛЬ ПОДВОДНОЙ ЛОДКИ */
+  #hud { position:fixed; top:12px; right:14px; z-index:60; display:flex; gap:10px; align-items:center;
+    background:linear-gradient(180deg, #24303c 0%, #111922 100%);
+    border:2.5px solid #3c4f62; border-radius:18px; padding:7px 12px 6px;
+    box-shadow:0 8px 30px rgba(0,0,0,.75), inset 0 1px 0 rgba(255,255,255,.18), inset 0 0 15px rgba(0,0,0,.85); }
+  .hud-screw { position:absolute; width:6px; height:6px; border-radius:50%; background:#4b5f73;
+    box-shadow:inset 0 1px 1px rgba(255,255,255,.4), 0 1px 2px rgba(0,0,0,.9); pointer-events:none; }
+  .hud-screw::after { content:""; position:absolute; left:1px; top:2.5px; width:4px; height:1px; background:#18222c; }
+  .hud-screw.tl { top:5px; left:6px; }
+  .hud-screw.tr { top:5px; right:6px; }
+  .hud-screw.bl { bottom:5px; left:6px; }
+  .hud-screw.br { bottom:5px; right:6px; }
+
+  /* Табличка зон — металлическая плашка с заклёпками */
   #zone-tag { position:fixed; top:12px; left:50%; transform:translateX(-50%); z-index:60;
-    background:rgba(3,12,26,.72); border:1px solid rgba(255,255,255,.14); border-radius:999px;
-    padding:7px 16px; font-size:13px; font-weight:700; letter-spacing:.4px; }
-  #sound { position:fixed; top:14px; right:0; }
-  #sound-btn { position:fixed; top:15px; right:296px; z-index:60; width:34px; height:34px; border-radius:50%;
-    border:1px solid rgba(255,255,255,.14); background:rgba(3,12,26,.72); color:#eaf6ff; cursor:pointer;
-    font-size:16px; line-height:1; }
+    background:linear-gradient(180deg, #283644 0%, #141e28 100%);
+    border:2px solid #3c4f62; border-radius:10px; padding:5px 22px 4px;
+    box-shadow:0 6px 24px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.2);
+    text-align:center; font-family:'Rubik',system-ui,sans-serif; user-select:none; }
+  #zone-tag .plaque-screw { position:absolute; width:5px; height:5px; border-radius:50%; background:#4b5f73;
+    box-shadow:inset 0 1px 1px rgba(255,255,255,.4), 0 1px 2px rgba(0,0,0,.8); }
+  #zone-tag .plaque-screw::after { content:""; position:absolute; left:1px; top:2px; width:3px; height:1px; background:#111; }
+  #zone-tag .plaque-screw.tl { top:4px; left:5px; }
+  #zone-tag .plaque-screw.tr { top:4px; right:5px; }
+  #zone-tag .plaque-screw.bl { bottom:4px; left:5px; }
+  #zone-tag .plaque-screw.br { bottom:4px; right:5px; }
+  #zone-tag .plaque-lbl { display:block; font-size:8px; font-weight:700; letter-spacing:1.5px;
+    text-transform:uppercase; color:#8ea8c2; opacity:.85; margin-bottom:1px; }
+  #zone-tag #zone-name { display:block; font-size:13.5px; font-weight:800; letter-spacing:.4px;
+    color:#eaf6ff; text-shadow:0 1px 4px rgba(0,0,0,.9); }
+
+  /* Круглые приборы */
+  .sub-gauge { position:relative; width:58px; text-align:center; cursor:default; user-select:none; }
+  .sub-gauge.click { cursor:pointer; }
+  .sub-gauge .casing { position:relative; width:58px; height:58px; border-radius:50%;
+    background:radial-gradient(circle, #273442 0%, #111922 100%);
+    border:2.5px solid #3c4f62; box-shadow:inset 0 2px 7px rgba(0,0,0,.85), 0 3px 8px rgba(0,0,0,.6);
+    overflow:hidden; }
+  .sub-gauge .casing::before { content:""; position:absolute; inset:0; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.25) 0%, transparent 60%);
+    pointer-events:none; z-index:5; }
+  .sub-gauge .dial-svg { width:100%; height:100%; display:block; }
+  .sub-gauge .gauge-val { font-size:11px; font-weight:800; color:#eaf6ff; margin-top:3px;
+    font-variant-numeric:tabular-nums; font-family:'Rubik',sans-serif; text-shadow:0 1px 3px rgba(0,0,0,.9);
+    white-space:nowrap; }
+  .sub-gauge .gauge-unit { font-size:8.5px; opacity:.65; text-transform:uppercase; font-weight:600; }
+
+  .needle-g { transform-origin:50px 50px; transition:transform 0.22s cubic-bezier(.2,.8,.3,1); }
+  .dial-txt { font-family:'Rubik',sans-serif; font-size:7.5px; font-weight:800; fill:#182816; text-anchor:middle; letter-spacing:.5px; }
+  .dial-sub { font-family:'Rubik',sans-serif; font-size:5.8px; font-weight:700; fill:#395236; text-anchor:middle; }
+
+  /* Кнопка-сонар (звук) */
+  #sound-btn { position:relative; width:44px; height:56px; border-radius:10px;
+    background:linear-gradient(180deg, #283644 0%, #141e28 100%);
+    border:2px solid #3c4f62; cursor:pointer; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:2px; padding:0;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.15), inset 0 0 8px rgba(0,0,0,.7), 0 3px 8px rgba(0,0,0,.5);
+    transition:transform .1s; }
+  #sound-btn:active { transform:scale(.95); }
+  #sound-btn .led { width:8px; height:8px; border-radius:50%; background:#d32f2f;
+    box-shadow:0 0 6px #f44336; transition:all .3s; }
+  #sound-btn.on .led { background:#2e7d32; box-shadow:0 0 8px #4caf50; }
+  #sound-btn .snd-icon { font-size:13px; line-height:1; }
+  #sound-btn .snd-lbl { font-size:7.5px; font-weight:800; letter-spacing:.5px; color:#8ea8c2; text-transform:uppercase; }
+
+  @media (max-width:640px) {
+    #hud { gap:6px; padding:5px 8px 4px; right:6px; top:8px; }
+    .sub-gauge { width:48px; }
+    .sub-gauge .casing { width:48px; height:48px; }
+    .sub-gauge .gauge-val { font-size:9.5px; }
+    #sound-btn { width:38px; height:48px; }
+    #zone-tag { top:8px; padding:4px 14px; }
+    #zone-tag #zone-name { font-size:11.5px; }
+  }
 
   /* Заголовки — гармоничная современная типографика в стиле сайта */
   .collage { position:absolute; left:50%; transform:translateX(-50%); text-align:center; width:100%; max-width:96vw;
@@ -144,12 +203,117 @@
 <div id="cable"></div>
 <div id="cabin" title="Тяните, чтобы погружаться"></div>
 
-<div id="zone-tag">Поверхность</div>
-<button id="sound-btn" title="Звук глубины">🔈</button>
+<!-- Общий градиент для фосфорных циферблатов приборов -->
+<svg width="0" height="0" style="position:absolute; pointer-events:none;">
+  <defs>
+    <radialGradient id="phosGrad" cx="45%" cy="40%" r="65%">
+      <stop offset="0%" stop-color="#f4fae6"/>
+      <stop offset="65%" stop-color="#d2e6b2"/>
+      <stop offset="100%" stop-color="#a4bd82"/>
+    </radialGradient>
+  </defs>
+</svg>
+
+<!-- Металлическая плашка текущего эшелона / зоны -->
+<div id="zone-tag">
+  <div class="plaque-screw tl"></div><div class="plaque-screw tr"></div>
+  <div class="plaque-screw bl"></div><div class="plaque-screw br"></div>
+  <span class="plaque-lbl">ЭШЕЛОН ПОГРУЖЕНИЯ</span>
+  <span id="zone-name">ПОВЕРХНОСТЬ</span>
+</div>
+
+<!-- Приборная панель подводной лодки -->
 <div id="hud">
-  <div class="gauge" id="g-depth"><div class="lbl">Глубина</div><div class="val" id="v-depth">0</div><div class="unit">метров</div></div>
-  <div class="gauge click" id="g-press"><div class="lbl">Давление</div><div class="val" id="v-press">1</div><div class="unit">атм</div></div>
-  <div class="gauge click" id="g-temp"><div class="lbl">Темп.</div><div class="val" id="v-temp">24</div><div class="unit">°C</div></div>
+  <div class="hud-screw tl"></div><div class="hud-screw tr"></div>
+  <div class="hud-screw bl"></div><div class="hud-screw br"></div>
+
+  <!-- Гидроакустический сонар (звук) -->
+  <button id="sound-btn" title="Гидроакустический сонар (звук глубины)">
+    <span class="led"></span>
+    <span class="snd-icon">📻</span>
+    <span class="snd-lbl">СОНАР</span>
+  </button>
+
+  <!-- Круглый глубиномер -->
+  <div class="sub-gauge" id="g-depth" title="Глубиномер">
+    <div class="casing">
+      <svg viewBox="0 0 100 100" class="dial-svg">
+        <circle cx="50" cy="50" r="46" fill="url(#phosGrad)"/>
+        <circle cx="50" cy="50" r="45" fill="none" stroke="#253520" stroke-width="1.2"/>
+        <path d="M 20 68 A 35 35 0 1 1 80 68" fill="none" stroke="#25381f" stroke-width="2" stroke-dasharray="2 3.5"/>
+        <g fill="#1a2815" font-family="'Rubik', sans-serif" font-size="7.5" font-weight="700" text-anchor="middle">
+          <text x="21" y="74">0</text>
+          <text x="21" y="44">3</text>
+          <text x="50" y="24">6</text>
+          <text x="79" y="44">9</text>
+          <text x="79" y="74">11</text>
+        </g>
+        <text x="50" y="38" class="dial-txt">ГЛУБИНА</text>
+        <text x="50" y="48" class="dial-sub">х1000 м</text>
+        <g id="nd-depth" class="needle-g" style="transform: rotate(-120deg);">
+          <polygon points="48.2,50 51.8,50 50,14" fill="#181818"/>
+          <polygon points="49,28 51,28 50,14" fill="#d32f2f"/>
+          <circle cx="50" cy="50" r="4" fill="#333" stroke="#111" stroke-width="1"/>
+          <circle cx="50" cy="50" r="1.5" fill="#aaa"/>
+        </g>
+      </svg>
+    </div>
+    <div class="gauge-val"><span id="v-depth">0</span> <span class="gauge-unit">м</span></div>
+  </div>
+
+  <!-- Круглый манометр -->
+  <div class="sub-gauge click" id="g-press" title="Манометр давления (нажмите для справки)">
+    <div class="casing">
+      <svg viewBox="0 0 100 100" class="dial-svg">
+        <circle cx="50" cy="50" r="46" fill="url(#phosGrad)"/>
+        <circle cx="50" cy="50" r="45" fill="none" stroke="#253520" stroke-width="1.2"/>
+        <path d="M 20 68 A 35 35 0 1 1 80 68" fill="none" stroke="#25381f" stroke-width="2" stroke-dasharray="2 3.5"/>
+        <g fill="#1a2815" font-family="'Rubik', sans-serif" font-size="7.5" font-weight="700" text-anchor="middle">
+          <text x="21" y="74">1</text>
+          <text x="21" y="44">300</text>
+          <text x="50" y="24">600</text>
+          <text x="79" y="44">900</text>
+          <text x="77" y="74">1.1k</text>
+        </g>
+        <text x="50" y="38" class="dial-txt">ДАВЛЕНИЕ</text>
+        <text x="50" y="48" class="dial-sub">АТМ</text>
+        <g id="nd-press" class="needle-g" style="transform: rotate(-120deg);">
+          <polygon points="48.2,50 51.8,50 50,14" fill="#181818"/>
+          <polygon points="49,28 51,28 50,14" fill="#d32f2f"/>
+          <circle cx="50" cy="50" r="4" fill="#333" stroke="#111" stroke-width="1"/>
+          <circle cx="50" cy="50" r="1.5" fill="#aaa"/>
+        </g>
+      </svg>
+    </div>
+    <div class="gauge-val"><span id="v-press">1</span> <span class="gauge-unit">атм</span></div>
+  </div>
+
+  <!-- Круглый термометр -->
+  <div class="sub-gauge click" id="g-temp" title="Термометр воды (нажмите для справки)">
+    <div class="casing">
+      <svg viewBox="0 0 100 100" class="dial-svg">
+        <circle cx="50" cy="50" r="46" fill="url(#phosGrad)"/>
+        <circle cx="50" cy="50" r="45" fill="none" stroke="#253520" stroke-width="1.2"/>
+        <path d="M 20 68 A 35 35 0 1 1 80 68" fill="none" stroke="#25381f" stroke-width="2" stroke-dasharray="2 3.5"/>
+        <g fill="#1a2815" font-family="'Rubik', sans-serif" font-size="7.5" font-weight="700" text-anchor="middle">
+          <text x="21" y="74">0</text>
+          <text x="21" y="44">7</text>
+          <text x="50" y="24">15</text>
+          <text x="79" y="44">22</text>
+          <text x="79" y="74">30</text>
+        </g>
+        <text x="50" y="38" class="dial-txt">ТЕМП.</text>
+        <text x="50" y="48" class="dial-sub">°C</text>
+        <g id="nd-temp" class="needle-g" style="transform: rotate(120deg);">
+          <polygon points="48.2,50 51.8,50 50,14" fill="#181818"/>
+          <polygon points="49,28 51,28 50,14" fill="#d32f2f"/>
+          <circle cx="50" cy="50" r="4" fill="#333" stroke="#111" stroke-width="1"/>
+          <circle cx="50" cy="50" r="1.5" fill="#aaa"/>
+        </g>
+      </svg>
+    </div>
+    <div class="gauge-val"><span id="v-temp">24</span> <span class="gauge-unit">°C</span></div>
+  </div>
 </div>
 
 <div class="hint">Крутите вниз или тяните батискаф ↓</div>
@@ -1042,8 +1206,10 @@ document.getElementById('cabin').innerHTML = `
 // ---- HUD обновление ----
 const ocean=document.getElementById('ocean');
 const vDepth=document.getElementById('v-depth'), vPress=document.getElementById('v-press'),
-      vTemp=document.getElementById('v-temp'), zoneTag=document.getElementById('zone-tag'),
-      cable=document.getElementById('cable'), cabin=document.getElementById('cabin');
+      vTemp=document.getElementById('v-temp'), zoneName=document.getElementById('zone-name'),
+      ndDepth=document.getElementById('nd-depth'), ndPress=document.getElementById('nd-press'),
+      ndTemp=document.getElementById('nd-temp'), cable=document.getElementById('cable'),
+      cabin=document.getElementById('cabin');
 // состояние звука объявляем заранее — render() ссылается на SOUND
 let SOUND=false, actx=null, osc=null, gain=null;
 function updateDrone(d){ if(!osc)return; osc.frequency.value=90 - d/MAXD*55; }
@@ -1056,7 +1222,20 @@ function render(){
   vDepth.textContent=Math.round(d).toLocaleString('ru-RU');
   vPress.textContent=Math.round(pressureAt(d)).toLocaleString('ru-RU');
   vTemp.textContent=tempAt(d).toFixed(d<1000?0:1);
-  zoneTag.textContent=zoneAt(d).name;
+  if(zoneName) zoneName.textContent=zoneAt(d).name;
+
+  // Стрелки аналоговых индикаторов подводной лодки (-120° до +120°)
+  const depthAngle = -120 + (Math.min(Math.max(d, 0), MAXD) / MAXD) * 240;
+  if(ndDepth) ndDepth.style.transform = `rotate(${depthAngle.toFixed(1)}deg)`;
+
+  const pressVal = pressureAt(d);
+  const pressAngle = -120 + (Math.min(Math.max(pressVal - 1, 0), 1099) / 1099) * 240;
+  if(ndPress) ndPress.style.transform = `rotate(${pressAngle.toFixed(1)}deg)`;
+
+  const tempVal = tempAt(d);
+  const tempAngle = -120 + (Math.min(Math.max(tempVal, 0), 30) / 30) * 240;
+  if(ndTemp) ndTemp.style.transform = `rotate(${tempAngle.toFixed(1)}deg)`;
+
   // водоросли по краям гаснут с глубиной
   const kv=Math.max(0,Math.min(1,1-(d-300)/900));
   kelpEls.forEach(el=>{ const base=(el.classList.contains('l2')||el.classList.contains('r2'))?0.62:0.95;
@@ -1431,12 +1610,19 @@ fxLoop();
 // ---- звук глубины (WebAudio, по желанию) ----
 document.getElementById('sound-btn').addEventListener('click',function(){
   SOUND=!SOUND;
+  const ic = this.querySelector('.snd-icon');
   if(SOUND){
     actx=actx||new (window.AudioContext||window.webkitAudioContext)();
     osc=actx.createOscillator(); gain=actx.createGain();
     osc.type='sine'; gain.gain.value=0.06; osc.connect(gain).connect(actx.destination);
-    updateDrone(curDepth()); osc.start(); this.textContent='🔊';
-  } else { try{osc.stop();}catch(_){} osc=null; this.textContent='🔈'; }
+    updateDrone(curDepth()); osc.start();
+    this.classList.add('on');
+    if(ic) ic.textContent='🔊';
+  } else {
+    try{osc.stop();}catch(_){} osc=null;
+    this.classList.remove('on');
+    if(ic) ic.textContent='📻';
+  }
 });
 </script>
 </body>
