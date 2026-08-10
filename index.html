@@ -72,11 +72,22 @@
     border:1px solid rgba(255,255,255,.14); background:rgba(3,12,26,.72); color:#eaf6ff; cursor:pointer;
     font-size:16px; line-height:1; }
 
-  /* Заголовки-коллажи */
-  .collage { position:absolute; left:50%; transform:translateX(-50%); text-align:center; width:92vw; }
-  .chip { display:inline-block; background:var(--paper); color:#1d1d1b; padding:4px 9px 6px; margin:3px 2px;
-    border-radius:3px; box-shadow:1px 2px 4px rgba(0,0,0,.35); font-weight:900; }
-  .collage .word { display:inline-block; white-space:nowrap; margin:0 6px; }
+  /* Заголовки — modern style */
+  .collage { position:absolute; left:50%; transform:translateX(-50%); text-align:center; width:auto; max-width:92vw;
+    padding:18px 36px; border-radius:16px;
+    background:linear-gradient(135deg, rgba(6,35,60,.55), rgba(3,18,31,.45));
+    border:1px solid rgba(255,255,255,.12);
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+    box-shadow:0 8px 32px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.08); }
+  .collage .title-text { font-family:'Trebuchet MS','Segoe UI',system-ui,sans-serif; font-weight:900;
+    text-transform:uppercase; letter-spacing:.12em; line-height:1.15;
+    background:linear-gradient(135deg, #59c3e8 0%, #2a9d8f 25%, #43a8ff 50%, #7b6ff0 75%, #59c3e8 100%);
+    background-size:200% 200%; -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent; animation:titleShimmer 4s ease-in-out infinite;
+    filter:drop-shadow(0 2px 8px rgba(89,195,232,.35)); }
+  .collage .title-sub { display:block; margin-top:6px; font-size:12px; font-weight:600;
+    letter-spacing:.25em; text-transform:uppercase; color:rgba(234,246,255,.45); }
+  @keyframes titleShimmer { 0%{background-position:0% 50%;} 50%{background-position:100% 50%;} 100%{background-position:0% 50%;} }
 
   /* Попап */
   #ov { position:fixed; inset:0; background:rgba(2,8,20,.55); z-index:9998; opacity:0; pointer-events:none;
@@ -941,29 +952,15 @@ ZONES.forEach(z => { stops.push(`${z.color[0]} ${Math.round(yAtDepth(z.d0))}px`)
 stops.push('#01060d ' + TOTAL + 'px');
 water.style.background = 'linear-gradient(to bottom,' + stops.join(',') + ')';
 
-// заголовок-коллаж
-function collage(text, size){
-  const cols=['#f2542d','#e63946','#ff7bac','#ffd23f','#2a9d8f','#2456c4','#7b2d8b','#43a047','#59c3e8','#d97706'];
-  const fonts=['Impact','Georgia','Arial Black','Courier New','Times New Roman','Verdana','Trebuchet MS'];
-  let i=0, html='';
-  text.split(' ').forEach(word=>{
-    html+='<span class="word">';
-    for(const ch of word){
-      const rot=(Math.random()*10-5).toFixed(1);
-      html+=`<span class="chip" style="color:${cols[i%cols.length]};font-family:'${fonts[i%fonts.length]}',sans-serif;`+
-            `font-size:${size}px;transform:rotate(${rot}deg)">${ch}</span>`;
-      i++;
-    }
-    html+='</span>';
-  });
-  return html;
-}
-function addCollage(text, topPx, size){
+// заголовок — modern style
+function addCollage(text, topPx, size, sub){
   const el=document.createElement('div'); el.className='collage'; el.style.top=topPx+'px';
-  el.innerHTML=collage(text,size); track.appendChild(el);
+  el.innerHTML=`<div class="title-text" style="font-size:${size}px">${text}</div>`
+    +(sub?`<span class="title-sub">${sub}</span>`:'');
+  track.appendChild(el);
 }
-addCollage('МАРИАНСКАЯ ВПАДИНА', 150, 40);
-addCollage('ВЫ НА ДНЕ', yAtDepth(MAXD)+150, 62);
+addCollage('МАРИАНСКАЯ ВПАДИНА', 150, 38, '10 935 метров вниз');
+addCollage('ВЫ НА ДНЕ', yAtDepth(MAXD)+150, 54, 'бездна челленджера');
 
 // баннеры зон — «аквариумные» стеклянные блоки, в своих слотах раскладки
 bannerItems.forEach(n=>{ const z=n.b;
